@@ -12,7 +12,7 @@ var populateList = function(countries){
     var option = document.createElement("option");
     option.label = country.name;
     option.value = country.name;
-    console.log(country.name);
+    // console.log(country.name);
     select.appendChild(option);
   })
 }
@@ -57,8 +57,25 @@ var requestComplete = function(){
 }
 
 var handleRegionSelectChange = function(){
-  console.log(this.value);
+  var filteredCountries = [];
+  console.log(filteredCountries.length);
+  for (var country of countries){
+    if (country.region === this.value) {
+      console.log(country);
+      filteredCountries.push(country);
+    }
+  console.log(filteredCountries.length);
+    return filteredCountries;
+  }
+
+  populateList(filteredCountries);
 }
+
+
+
+    
+  
+
 
 
 
