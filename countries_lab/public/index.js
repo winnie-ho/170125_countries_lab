@@ -5,9 +5,6 @@ var makeRequest = function(url, callback){
   request.send();
 }
 
-//this refers to the request status
-//responseText is what is returned from the request
-//parsing the JSON string will bring back as an object that can be used to access it's attributes.
 
 var populateList = function(countries){
   var select = document.querySelector("#countrySelect");
@@ -17,8 +14,36 @@ var populateList = function(countries){
     option.value = country.name;
     console.log(country.name);
     select.appendChild(option);
-
   })
+}
+
+
+var populateRegionList = function(countries){
+  var regionSelect = document.querySelector("#regionSelect");
+  
+  var regions = [];
+  for (var country of countries ){
+    regions.push(country.region);
+  }
+
+  var filteredRegions = regions.filter(function(region, index, regions){
+    return regions.indexOf(region) === index;
+  })
+
+  for (var region of filteredRegions) {
+    
+    if(region !== ""){
+    var option = document.createElement("option");
+    option.label = region
+    option.value = region
+    regionSelect.appendChild(option);
+  }else{
+    var option = document.createElement("option");
+    option.label = "Others"
+    option.value = region
+    regionSelect.appendChild(option);
+  }
+  }
 }
 
 var countries = null;
@@ -28,9 +53,12 @@ var requestComplete = function(){
   var jsonString = this.responseText;
   countries = JSON.parse(jsonString);
   populateList(countries);
+  populateRegionList(countries);
 }
 
-
+var handleRegionSelectChange = function(){
+  console.log(this.value);
+}
 
 
 
@@ -77,6 +105,11 @@ var createBorderInfo = function(country){
 
 
 
+
+
+
+
+
 var app = function(){
   var url = "https://restcountries.eu/rest/v1/all";
   makeRequest(url, requestComplete);
@@ -84,6 +117,8 @@ var app = function(){
   var select = document.querySelector("#countrySelect");
   select.onchange = handleSelectChange;
 
+  var regionSelect = document.querySelector("#regionSelect");
+  regionSelect.onchange = handleRegionSelectChange;
 }
 
 window.onload = app;
